@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Layanan Pengaduan Masyarakat</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/scrollreveal"></script>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #3b82f6;
+      --accent: #60a5fa;
+      --dark: #0f172a;
+      --light: #f8fafc;
+      --gradient: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      --gradient-2: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+      --gradient-3: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Watermark Background */
+    .watermark {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(-25deg);
+      font-size: 50px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.14);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 0;
+      user-select: none;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+      animation: float 20s infinite ease-in-out;
+    }
+
+    .shape:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: -100px;
+      left: -100px;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      top: 50%;
+      right: -50px;
+      animation-delay: 5s;
+    }
+
+    .shape:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      bottom: 100px;
+      left: 20%;
+      animation-delay: 10s;
+    }
+
+    .shape:nth-child(4) {
+      width: 250px;
+      height: 250px;
+      top: 20%;
+      right: 15%;
+      animation-delay: 3s;
+    }
+
+    .shape:nth-child(5) {
+      width: 180px;
+      height: 180px;
+      bottom: -50px;
+      right: 25%;
+      animation-delay: 7s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(50px, -50px) scale(1.1); }
+      50% { transform: translate(-30px, 50px) scale(0.9); }
+      75% { transform: translate(40px, 30px) scale(1.05); }
+    }
+
+    /* MOBILE LOGO */
+    .mobile-logo-container {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+
+    .mobile-logo-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .mobile-logo {
+      width: 55px;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .mobile-watermark {
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* Header */
+    header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      color: white;
+      padding: 60px 20px 40px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 1.1em;
+      font-weight: 400;
+      opacity: 0.95;
+    }
+
+    /* Container */
+    .container {
+      position: relative;
+      z-index: 10;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .form-card h2 {
+      color: var(--primary);
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .form-card .subtitle {
+      color: #64748b;
+      margin-bottom: 30px;
+      font-size: 0.95em;
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      color: var(--dark);
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 0.95em;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95em;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+      transform: translateY(-2px);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* File Upload */
+    .file-upload {
+      position: relative;
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      background: #f8fafc;
+    }
+
+    .file-upload:hover {
+      border-color: var(--secondary);
+      background: rgba(59,130,246,0.05);
+    }
+
+    .file-upload input[type="file"] {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      cursor: pointer;
+    }
+
+    .file-upload-icon {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    .file-upload-text {
+      color: #64748b;
+      font-size: 0.9em;
+    }
+
+    /* Button */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.05em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(59,130,246,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(59,130,246,0.5);
+    }
+
+    .submit-btn:hover:before {
+      left: 100%;
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 30px 20px;
+      color: rgba(255,255,255,0.9);
+      font-size: 0.9em;
+    }
+
+    footer a {
+      color: rgba(255,255,255,0.95);
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+    }
+
+    footer a:hover {
+      border-bottom-color: white;
+    }
+
+    /* Success Message */
+    .success-message {
+      display: none;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+      animation: slideDown 0.5s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .mobile-logo-container {
+        display: flex;
+      }
+
+      .watermark {
+        font-size: 30px;
+      }
+
+      header h1 {
+        font-size: 1.8em;
+      }
+
+      header p {
+        font-size: 0.95em;
+      }
+
+      .form-card {
+        padding: 30px 25px;
+      }
+
+      .form-card h2 {
+        font-size: 1.5em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px;
+      }
+
+      .form-card {
+        padding: 25px 20px;
+      }
+
+      header {
+        padding: 40px 15px 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Watermark -->
+  <div class="watermark">POLITEKNIK STIA LAN MAKASSAR</div>
+
+  <!-- Animated Background -->
+  <div class="bg-animation">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <!-- MOBILE LOGO -->
+    <div class="mobile-logo-container">
+      <div class="mobile-logo-wrapper">
+        <img src="LOGO UPT.png" class="mobile-logo" alt="Logo 1">
+        <img src="LOGO PEMPROV.png" class="mobile-logo" alt="Logo 2">
+      </div>
+      <div class="mobile-watermark"></div>
+    </div>
+
+    <h1>Layanan Pengaduan Publik</h1>
+    <p>Sampaikan keluhan, saran, atau laporan Anda dengan mudah dan cepat</p>
+  </header>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Success Message -->
+    <div class="success-message" id="successMessage">
+      ✓ Pengaduan Anda telah berhasil dikirim! Terima kasih atas partisipasi Anda.
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <h2>Form Pengaduan</h2>
+      <p class="subtitle">Silakan isi formulir di bawah ini dengan lengkap dan jelas</p>
+
+      <form id="complaintForm">
+        <div class="form-group">
+          <label for="name">Nama Lengkap *</label>
+          <input type="text" id="name" name="name" required placeholder="Masukkan nama lengkap Anda">
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input type="email" id="email" name="email" required placeholder="contoh@email.com">
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Nomor Telepon *</label>
+          <input type="tel" id="phone" name="phone" required placeholder="08xxxxxxxxxx">
+        </div>
+
+        <div class="form-group">
+          <label for="category">Kategori Pengaduan *</label>
+          <select id="category" name="category" required>
+            <option value="">Pilih Kategori</option>
+            <option value="pelayanan">Pelayanan Publik</option>
+            <option value="infrastruktur">Infrastruktur</option>
+            <option value="lingkungan">Lingkungan</option>
+            <option value="pendidikan">Pendidikan</option>
+            <option value="kesehatan">Kesehatan</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Judul Pengaduan *</label>
+          <input type="text" id="subject" name="subject" required placeholder="Ringkasan singkat pengaduan Anda">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Detail Pengaduan *</label>
+          <textarea id="description" name="description" required placeholder="Jelaskan pengaduan Anda secara detail..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Lampiran (Opsional)</label>
+          <div class="file-upload">
+            <input type="file" id="file" name="file" accept="image/*,.pdf,.doc,.docx">
+            <div class="file-upload-icon">📎</div>
+            <div class="file-upload-text">
+              <strong>Klik untuk upload file</strong><br>
+              <small>Format: JPG, PNG, PDF, DOC (Maks. 5MB)</small>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Kirim Pengaduan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Politeknik STIA LAN Makassar. Semua hak dilindungi.</p>
+    <p style="margin-top: 10px;">
+      <a href="#privacy">Kebijakan Privasi</a> | 
+      <a href="#terms">Syarat & Ketentuan</a>
+    </p>
+  </footer>
+
+  <script>
+    // ScrollReveal Animation
+    ScrollReveal().reveal('header', { 
+      origin: 'top',
+      distance: '80px',
+      duration: 1000,
+      delay: 200
+    });
+
+    ScrollReveal().reveal('.form-card', { 
+      origin: 'bottom',
+      distance: '50px',
+      duration: 800,
+      delay: 400
+    });
+
+    // Form Submission
+    document.getElementById('complaintForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Show success message
+      const successMessage = document.getElementById('successMessage');
+      successMessage.classList.add('show');
+      
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      
+      // Reset form
+      this.reset();
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => {
+        successMessage.classList.remove('show');
+      }, 5000);
+    });
+
+    // File upload feedback
+    document.getElementById('file').addEventListener('change', function(e) {
+      const fileName = e.target.files[0]?.name;
+      if (fileName) {
+        const fileUploadText = document.querySelector('.file-upload-text');
+        fileUploadText.innerHTML = `<strong>✓ ${fileName}</strong><br><small>Klik untuk mengganti file</small>`;
+      }
+    });
+  </script>
+</body>
+</html>
